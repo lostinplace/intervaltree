@@ -21,6 +21,7 @@ limitations under the License.
 """
 from operator import attrgetter
 from math import floor, log
+import sys
 
 
 def l2(num):
@@ -299,11 +300,11 @@ class Node(object):
             return self[1].search_point(point, result)
         return result
 
-    def search_point_with_filter(self, point, max_results, filter, result):
+    def search_point_with_filter(self, point, result, remaining_results=sys.maxsize, filter=None):
         """
         Returns all intervals that contain point satisfying the provided filter.
         :param point: point to be searched for
-        :param max_results: result count, when reached
+        :param remaining_results: result count, when reached
         :param filter: a filter such that if it is inequal to the node value's existing filter,
             that value will be rejected
         :param results: memo of results
@@ -311,17 +312,17 @@ class Node(object):
         """
 
         for an_interval in self.s_center:
-            if an_interval.filter != filter:
+            if filter is not None and an_interval.filter != filter:
                 continue
             if an_interval.begin <= point < an_interval.end:
                 result.add(an_interval)
-                max_results -= 1
-                if not max_results:
+                remaining_results -= 1
+                if not remaining_results:
                     return result
         if point < self.x_center and self[0]:
-            return self[0].search_point_with_filter(point, max_results, filter, result)
+            return self[0].search_point_with_filter(point, remaining_results, filter, result)
         elif point > self.x_center and self[1]:
-            return self[1].search_point_with_filter(point, max_results, filter, result)
+            return self[1].search_point_with_filter(point, remaining_results, filter, result)
         return result
 
     def prune(self):

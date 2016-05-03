@@ -26,6 +26,7 @@ import collections
 from sortedcontainers import SortedDict
 from copy import copy
 from warnings import warn
+import sys
 
 try:
     xrange  # Python 2?
@@ -327,7 +328,9 @@ class IntervalTree(collections.MutableSet):
         
         Completes in O(log n) time.
         """
-        return self.add(Interval(begin, end, data))
+
+        filter = data.filter if data and hasattr(data, 'filter') else None
+        return self.add(Interval(begin, end, data, filter))
     appendi = addi
     
     def update(self, intervals):
@@ -772,7 +775,7 @@ class IntervalTree(collections.MutableSet):
         """
         return 0 == len(self)
 
-    def search(self, begin, end=None, strict=False):
+    def search(self, begin, end=None, strict=False, filter=None, max_results=sys.maxsize):
         """
         Returns a set of all intervals overlapping the given range. Or,
         if strict is True, returns the set of all intervals fully
@@ -790,13 +793,13 @@ class IntervalTree(collections.MutableSet):
         if end is None:
             try:
                 iv = begin
-                return self.search(iv.begin, iv.end, strict=strict)
+                return self.search(iv.begin, end=iv.end, strict=strict, filter=filter, max_results=max_results)
             except:
-                return root.search_point(begin, set())
+                return root.search_point_with_filter(begin, set(), remaining_results=max_results, filter=filter)
         elif begin >= end:
             return set()
         else:
-            result = root.search_point(begin, set())
+            result = root.search_point_with_filter(begin, set(), remaining_results=max_results, filter=filter)
 
             boundary_table = self.boundary_table
             bound_begin = boundary_table.bisect_left(begin)
