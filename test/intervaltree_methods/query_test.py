@@ -77,7 +77,7 @@ def test_partial_slice_query():
 
 def test_tree_bounds():
     def assert_tree_bounds(t):
-        begin, end, _ = set(t).pop()
+        begin, end, _, _ = set(t).pop()
         for iv in t:
             if iv.begin < begin: begin = iv.begin
             if iv.end > end: end = iv.end

@@ -24,11 +24,11 @@ from collections import namedtuple
 
 
 # noinspection PyBroadException
-class Interval(namedtuple('IntervalBase', ['begin', 'end', 'data'])):
+class Interval(namedtuple('IntervalBase', ['begin', 'end', 'data','filter'])):
     __slots__ = ()  # Saves memory, avoiding the need to create __dict__ for each interval
 
-    def __new__(cls, begin, end, data=None):
-        return super(Interval, cls).__new__(cls, begin, end, data)
+    def __new__(cls, begin, end, data=None, filter=None):
+        return super(Interval, cls).__new__(cls, begin, end, data, filter)
     
     def overlaps(self, begin, end=None):
         """

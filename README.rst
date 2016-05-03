@@ -199,7 +199,7 @@ Examples
        >>> iv.data
        (4, 7)
 
-       >>> begin, end, data = iv
+       >>> begin, end, data, filter = iv
        >>> begin
        4
        >>> end

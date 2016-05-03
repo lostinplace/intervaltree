@@ -49,13 +49,13 @@ def test_copy():
 
 def test_len():
     iv = Interval(0, 0)
-    assert len(iv) == 3
+    assert len(iv) == 4
 
     iv = Interval(0, 1, 2)
-    assert len(iv) == 3
+    assert len(iv) == 4
 
     iv = Interval(1.3, 2.2)
-    assert len(iv) == 3
+    assert len(iv) == 4
 
 
 def test_length():

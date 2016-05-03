@@ -263,7 +263,7 @@ def test_merge_equals_reducer_with_initializer():
     t.verify()
     assert len(t) == len(orig)
     assert t != orig
-    assert sorted(t) == [Interval(b, e, [d]) for b, e, d in sorted(orig)]
+    assert sorted(t) == [Interval(b, e, [d]) for b, e, d, f in sorted(orig)]
 
     # many Intervals in tree, with change
     t = trees['ivs1']()
