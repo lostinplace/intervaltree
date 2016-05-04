@@ -300,29 +300,32 @@ class Node(object):
             return self[1].search_point(point, result)
         return result
 
-    def search_point_with_filter(self, point, result, remaining_results=sys.maxsize, filter=None):
+    def search_point_with_filter(self, point, result, length=0, remaining_results=sys.maxsize, filter=None, strict=False):
         """
         Returns all intervals that contain point satisfying the provided filter.
         :param point: point to be searched for
         :param remaining_results: result count, when reached
+        :param length: the length of the segment
         :param filter: a filter such that if it is inequal to the node value's existing filter,
             that value will be rejected
         :param results: memo of results
-        :return:
+        :return: a collection of intervals
         """
 
         for an_interval in self.s_center:
             if filter is not None and an_interval.filter != filter:
                 continue
-            if an_interval.begin <= point < an_interval.end:
+            if an_interval.begin <= point <= (point+length) < an_interval.end:
                 result.add(an_interval)
                 remaining_results -= 1
                 if not remaining_results:
                     return result
         if point < self.x_center and self[0]:
-            return self[0].search_point_with_filter(point, remaining_results, filter, result)
+            return self[0].search_point_with_filter(point, result, length,
+                remaining_results, filter, strict)
         elif point > self.x_center and self[1]:
-            return self[1].search_point_with_filter(point, remaining_results, filter, result)
+            return self[1].search_point_with_filter(point, result, length,
+                remaining_results, filter, strict)
         return result
 
     def prune(self):

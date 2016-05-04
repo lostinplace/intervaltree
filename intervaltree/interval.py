@@ -24,7 +24,7 @@ from collections import namedtuple
 
 
 # noinspection PyBroadException
-class Interval(namedtuple('IntervalBase', ['begin', 'end', 'data','filter'])):
+class Interval(namedtuple('IntervalBase', ['begin', 'end', 'data', 'filter'])):
     __slots__ = ()  # Saves memory, avoiding the need to create __dict__ for each interval
 
     def __new__(cls, begin, end, data=None, filter=None):

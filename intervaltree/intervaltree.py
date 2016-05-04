@@ -795,11 +795,23 @@ class IntervalTree(collections.MutableSet):
                 iv = begin
                 return self.search(iv.begin, end=iv.end, strict=strict, filter=filter, max_results=max_results)
             except:
-                return root.search_point_with_filter(begin, set(), remaining_results=max_results, filter=filter)
+                return root.search_point_with_filter(
+                    begin, set(),
+                    length=0,
+                    remaining_results=max_results,
+                    filter=filter,
+                    strict=strict
+                )
         elif begin >= end:
             return set()
         else:
-            result = root.search_point_with_filter(begin, set(), remaining_results=max_results, filter=filter)
+            result = root.search_point_with_filter(
+                begin, set(),
+                length=end-begin,
+                remaining_results=max_results,
+                filter=filter,
+                strict=strict
+            )
 
             boundary_table = self.boundary_table
             bound_begin = boundary_table.bisect_left(begin)

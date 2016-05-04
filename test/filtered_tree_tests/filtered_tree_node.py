@@ -34,8 +34,7 @@ def test_that_filter_does_something():
     assert len(x) == 1
     element = x.pop()
     assert element.data == testResource
-
-
+    
 
 if __name__ in ("__main__", 'test.filtered_tree_tests.filtered_tree_node') :
     pytest.main([__file__, '-v'])
