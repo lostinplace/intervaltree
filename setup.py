@@ -33,7 +33,7 @@ import re
 
 
 ## CONFIG
-target_version = '2.1.0'
+target_version = 'lostinplace-version'
 create_rst = True
 
 
