@@ -237,6 +237,8 @@ class IntervalTree(collections.MutableSet):
         ivs = [Interval(*t) for t in tups]
         return IntervalTree(ivs)
 
+    _data_dict = None
+
     def __init__(self, intervals=None):
         """
         Set up a tree. If intervals is provided, add all the intervals 
@@ -256,6 +258,8 @@ class IntervalTree(collections.MutableSet):
         self.boundary_table = SortedDict()
         for iv in self.all_intervals:
             self._add_boundaries(iv)
+
+        self._data_dict = {}
 
     def copy(self):
         """
@@ -320,6 +324,11 @@ class IntervalTree(collections.MutableSet):
             self.top_node = self.top_node.add(interval)
         self.all_intervals.add(interval)
         self._add_boundaries(interval)
+        if interval.data not in self._data_dict:
+            self._data_dict[interval.data] = set()
+        self._data_dict[interval.data].add(interval)
+
+
     append = add
     
     def addi(self, begin, end, data=None):
@@ -332,6 +341,9 @@ class IntervalTree(collections.MutableSet):
         filter = data.filter if data and hasattr(data, 'filter') else None
         return self.add(Interval(begin, end, data, filter))
     appendi = addi
+
+    def get_intervals_for_data(self, data):
+        return self._data_dict[data]
     
     def update(self, intervals):
         """
@@ -364,6 +376,7 @@ class IntervalTree(collections.MutableSet):
         self.top_node = self.top_node.remove(interval)
         self.all_intervals.remove(interval)
         self._remove_boundaries(interval)
+        self._data_dict[interval.data].remove(interval)
         #self.verify()
     
     def removei(self, begin, end, data=None):
