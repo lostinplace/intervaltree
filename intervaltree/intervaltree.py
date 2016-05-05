@@ -821,12 +821,13 @@ class IntervalTree(collections.MutableSet):
                 boundary_table.iloc[index] for index in xrange(bound_begin, bound_end)
             ))
 
-            # TODO: improve strict search to use node info instead of less-efficient filtering
-            if strict:
-                result = set(
-                    iv for iv in result
-                    if iv.begin >= begin and iv.end <= end
-                )
+            # cwheeler: implemented TODO
+            # # TODO: improve strict search to use node info instead of less-efficient filtering
+            # if strict:
+            #     result = set(
+            #         iv for iv in result
+            #         if iv.begin >= begin and iv.end <= end
+            #     )
             return result
     
     def begin(self):
