@@ -282,9 +282,16 @@ class Node(object):
         """
         Returns all intervals that overlap the point_list.
         """
+        result = self.search_overlap_with_filter(point_list)
+        return result
+
+    def search_overlap_with_filter(self, point_list, max_results=sys.maxsize, filter=None):
+        """
+        Returns all intervals that overlap the point_list.
+        """
         result = set()
         for j in point_list:
-            self.search_point(j, result)
+            self.search_point_with_filter(j, result, remaining_results=max_results, filter=filter)
         return result
 
     def search_point(self, point, result):
