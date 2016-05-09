@@ -27,6 +27,7 @@ from sortedcontainers import SortedDict
 from copy import copy
 from warnings import warn
 import sys
+import collections
 
 try:
     xrange  # Python 2?
@@ -324,13 +325,20 @@ class IntervalTree(collections.MutableSet):
             self.top_node = self.top_node.add(interval)
         self.all_intervals.add(interval)
         self._add_boundaries(interval)
-        if interval.data not in self._data_dict:
-            self._data_dict[interval.data] = set()
-        self._data_dict[interval.data].add(interval)
-
+        data_key = IntervalTree._get_data_dict_key(interval.data)
+        if data_key not in self._data_dict:
+            self._data_dict[data_key] = set()
+        self._data_dict[data_key].add(interval)
 
     append = add
-    
+
+    @staticmethod
+    def _get_data_dict_key(self, data=None):
+        if isinstance(data, collections.Hashable):
+            return data
+        return id(data)
+
+
     def addi(self, begin, end, data=None):
         """
         Shortcut for add(Interval(begin, end, data)).
@@ -376,9 +384,10 @@ class IntervalTree(collections.MutableSet):
         self.top_node = self.top_node.remove(interval)
         self.all_intervals.remove(interval)
         self._remove_boundaries(interval)
-        tmp = self._data_dict[interval.data]
+        data_key = IntervalTree._get_data_dict_key(interval.data)
+        tmp = self._data_dict.get(data_key)
 
-        if interval in tmp:
+        if interval in (tmp or {}):
             tmp.remove
 
     def removei(self, begin, end, data=None):
