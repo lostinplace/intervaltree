@@ -388,7 +388,7 @@ class IntervalTree(collections.MutableSet):
         tmp = self._data_dict.get(data_key)
 
         if interval in (tmp or {}):
-            tmp.remove
+            tmp.remove(interval)
 
     def removei(self, begin, end, data=None):
         """
