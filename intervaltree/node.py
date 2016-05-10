@@ -322,7 +322,7 @@ class Node(object):
         for an_interval in self.s_center:
             if filter is not None and an_interval.filter != filter:
                 continue
-            if an_interval.begin <= point <= (point+length) <= an_interval.end:
+            if an_interval.begin <= point <= (point+length) < an_interval.end:
                 result.add(an_interval)
                 remaining_results -= 1
                 if not remaining_results:
